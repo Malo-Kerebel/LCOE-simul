@@ -36,7 +36,7 @@ class source(object):
             if y % self.lifespan == 0:
                 cost += self.construction
             energy += self.power * 365.25 * 24 * self.capacity_factor
-            cost += self.monthly
+            cost += self.monthly * 12
             if y == self.maintenance_year:
                 cost += self.maintenance
             LCOE.append(cost/energy * 1000000)  # to get €/MWh
@@ -51,8 +51,8 @@ EPR_flammanville_60 = source("Flammanville-3, 60 ans", 1630, 0.75, 19100,
                              10, 60, 1000, 40)
 EPR_flammanville_40 = source("Flammanville-3, 40 ans", 1630, 0.75, 19100,
                              10, 40)
-# EPR_expertise = source("EPR_expertise, 40 ans", 1630, 0.75, 10000,
-                       # 10, 40)
+EPR_expertise = source("EPR_expertise, 60 ans", 1630, 0.75, 10000,
+                       10, 60)
 # I theorize a monthly cost of 10M€ per month which seem rather
 # high
 year = 60
@@ -60,7 +60,7 @@ y = np.arange(year)
 plt.plot(y, solar.LCOE(year), label=solar)
 plt.plot(y, EPR_flammanville_60.LCOE(year), label=EPR_flammanville_60)
 plt.plot(y, EPR_flammanville_40.LCOE(year), label=EPR_flammanville_40)
-# plt.plot(y, EPR_expertise.LCOE(year), label=EPR_expertise)
+plt.plot(y, EPR_expertise.LCOE(year), label=EPR_expertise)
 plt.legend()
 plt.xlabel("years")
 plt.ylabel("€/MWh")

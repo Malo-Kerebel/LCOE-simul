@@ -37,7 +37,7 @@ class source(object):
                 cost += self.construction
             energy += self.power * 365.25 * 24 * self.capacity_factor
             cost += self.monthly * 12
-            if y == self.maintenance_year:
+            if y % self.lifespan == self.maintenance_year:
                 cost += self.maintenance
             LCOE.append(cost/energy * 1000000)  # to get €/MWh
 
@@ -46,16 +46,16 @@ class source(object):
         return LCOE
 
 
-solar = source("solar, 30 ans", 20.3, 0.15, 18.8, 0, 30)
+solar = source("solar, 30 ans", 20.3, 0.15, 18.8, 0.02, 25)
 EPR_flammanville_60 = source("Flammanville-3, 60 ans", 1630, 0.75, 19100,
                              10, 60, 1000, 40)
 EPR_flammanville_40 = source("Flammanville-3, 40 ans", 1630, 0.75, 19100,
                              10, 40)
 EPR_expertise = source("EPR_expertise, 60 ans", 1630, 0.75, 10000,
-                       10, 60)
+                       10, 60, 1000, 40)
 # I theorize a monthly cost of 10M€ per month which seem rather
 # high
-year = 60
+year = 120
 y = np.arange(year)
 plt.plot(y, solar.LCOE(year), label=solar)
 plt.plot(y, EPR_flammanville_60.LCOE(year), label=EPR_flammanville_60)
